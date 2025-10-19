@@ -23,10 +23,6 @@ func main() {
 			log.Println(err)
 		}
 	})
-	err := http.ListenAndServe(":3000", r)
-	if err != nil {
-		panic(err)
-	}
 
 	s, err := gocron.NewScheduler()
 	if err != nil {
