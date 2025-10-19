@@ -8,8 +8,8 @@ import (
 
 type Response struct {
 	Current struct {
-		Time        string  `json:"time"`
-		Temperature float64 `json:"temperature_2m"`
+		Time          string  `json:"time"`
+		Temperature2m float64 `json:"temperature_2m"`
 	}
 }
 
