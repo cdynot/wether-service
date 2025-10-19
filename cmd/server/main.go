@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -47,10 +48,16 @@ func main() {
 		var reading Reading
 		err = conn.QueryRow(
 			ctx,
-			"select name, timestamp, temporature from reading where name = $1 order by desc limit 1",
+			"select name, timestamp, temperature from reading where name = $1 order by timestamp desc limit 1",
 			city,
 		).Scan(&reading.Name, &reading.Timestamp, &reading.Temperature)
 		if err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				w.WriteHeader(http.StatusNotFound)
+				w.Write([]byte("Not found"))
+				return
+			}
+
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("internal error"))
 			return
